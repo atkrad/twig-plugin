@@ -21,6 +21,7 @@
     },
     "require": {
         "php": ">=5.4.19",
+	    "twig/twig": "1.16.*",
         "cakephp/cakephp": "3.0.*-dev",
         "cakephp/plugin-installer": "*"
     },
