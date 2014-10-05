@@ -1,0 +1,35 @@
+{
+    "name": "atkrad/twig-plugin",
+    "description": "Twig plugin",
+    "homepage": "https://github.com/atkrad/twig-plugin",
+    "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "twig",
+        "template engine"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mohammad Abdoli Rad",
+            "homepage": "https://github.com/atkrad"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/atkrad/twig-plugin/issues",
+        "source": "https://github.com/atkrad/twig-plugin"
+    },
+    "require": {
+        "php": ">=5.4.19",
+        "cakephp/cakephp": "3.0.*-dev",
+        "cakephp/plugin-installer": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Twig\\": "src"
+        }
+    },
+    "extra": {
+        "installer-name": "Twig"
+    }
+}
