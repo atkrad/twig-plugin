@@ -265,7 +265,7 @@ class TwigView extends View
         }
 
         $paths = Hash::merge(
-            $this->twig->getLoader()->getPaths($this->getPluginNamespace()),
+            $this->twig->getLoader()->getPaths($this->getPluginNamespace($this->plugin)),
             $this->twig->getLoader()->getPaths()
         );
 
@@ -274,7 +274,7 @@ class TwigView extends View
                 $filename = $name . $this->_ext;
 
                 if ($this->plugin) {
-                    $filename = $this->getPluginNamespace(true) . DS . $filename;
+                    $filename = $this->getPluginNamespace($this->plugin, true) . DS . $filename;
                 }
 
                 return $filename;
@@ -298,26 +298,26 @@ class TwigView extends View
         $this->paths[] = ['path' => $appPath, 'namespace' => Twig_Loader_Filesystem::MAIN_NAMESPACE];
         $filesystemLoader = new Twig_Loader_Filesystem([$appPath, $mainPath]);
 
-        if ($this->plugin) {
-            $pluginTemplatePath = Plugin::classPath($this->plugin) . 'Template';
-            $appPluginPath = $appPath . 'Plugin' . DS . $this->plugin;
+        foreach (Plugin::loaded() as $plugin) {
+            $pluginTemplatePath = Plugin::classPath($plugin) . 'Template';
+            $appPluginPath = $appPath . 'Plugin' . DS . $plugin;
 
             if (is_dir($pluginTemplatePath)) {
-                $this->paths[] = ['path' => $pluginTemplatePath, 'namespace' => $this->getPluginNamespace()];
+                $this->paths[] = ['path' => $pluginTemplatePath, 'namespace' => $this->getPluginNamespace($plugin)];
 
                 if ($this->theme) {
                     $filesystemLoader->addPath(
                         Plugin::classPath($this->theme) . 'Template',
-                        Inflector::underscore($this->plugin)
+                        Inflector::underscore($plugin)
                     );
                 }
-                $filesystemLoader->addPath($pluginTemplatePath, $this->getPluginNamespace());
+                $filesystemLoader->addPath($pluginTemplatePath, $this->getPluginNamespace($plugin));
             }
 
             if (is_dir($appPluginPath)) {
-                $this->paths[] = ['path' => $appPath, 'namespace' => $this->getPluginNamespace()];
+                $this->paths[] = ['path' => $appPath, 'namespace' => $this->getPluginNamespace($plugin)];
 
-                $filesystemLoader->addPath($appPluginPath, $this->getPluginNamespace());
+                $filesystemLoader->addPath($appPluginPath, $this->getPluginNamespace($plugin));
             }
         }
 
@@ -346,16 +346,18 @@ class TwigView extends View
     /**
      * Get plugin namespace
      *
-     * @param bool $withSign At sign (@) symbol
+     * @param string $plugin Plugin name
+     * @param bool   $withSign   At sign (@) symbol
+     *
      *
      * @return string
      */
-    protected function getPluginNamespace($withSign = false)
+    protected function getPluginNamespace($plugin, $withSign = false)
     {
         if ($withSign) {
-            return '@' . Inflector::underscore($this->plugin);
+            return '@' . Inflector::underscore($plugin);
         } else {
-            return Inflector::underscore($this->plugin);
+            return Inflector::underscore($plugin);
         }
     }
 }
