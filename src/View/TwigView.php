@@ -312,6 +312,8 @@ class TwigView extends View
                     );
                 }
                 $filesystemLoader->addPath($pluginTemplatePath, $this->getPluginNamespace($plugin));
+                $filesystemLoader->addPath($appPath, $this->getPluginNamespace($plugin));
+                $filesystemLoader->addPath($mainPath, $this->getPluginNamespace($plugin));
             }
 
             if (is_dir($appPluginPath)) {
